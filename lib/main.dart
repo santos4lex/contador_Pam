@@ -6,20 +6,21 @@ void main() {
     );
 }
 
-// atalho para criar digite stless depois do enter
+// Atalho para criar Widget Stateless depois do enter
 class MyApp extends StatelessWidget{
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      // o caba apaga a bandeira de debug (que atributo imenso)
+      // Apagando a bandeira de Debug
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
   }
 }
 
+// Criando o Widget Stateful
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -30,18 +31,32 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int contador = 0;
 
+ // Função de decrementar
   void decrement(){
-    contador--;
+    setState((){
+      contador--;
+    });
+    
     print(contador);
   }
+
+  // Função de incrementar
   void increment(){
-    contador++;
+    setState(() {
+      contador++;
+    });
     print(contador);
+    
   }
+
+  bool get isEmpty => contador == 0;
+  bool get isFull => contador == 15;
 
   @override
   Widget build(BuildContext context) {
   return Scaffold(
+
+    // Conteúdo do Widget
    body: Container(
     decoration: BoxDecoration(
       image: DecorationImage(image: AssetImage('assets/images/fundo_resenha1.jpg'),
@@ -52,10 +67,11 @@ class _HomePageState extends State<HomePage> {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children:[
-        Text('Pode entrar!',
+        // Caso estiver cheio, mostra "Lotado!". Senão, mostra "Pode entrar!"
+        Text(isFull ? 'Lotado!' : 'Pode entrar!',
         style: TextStyle(
           fontSize: 26,
-          color: Color.fromARGB(255,4,87,154),
+          color: isFull ? Colors.red : Color.fromARGB(255,4,87,154),
           fontWeight: FontWeight.w700
         ),
       ),
@@ -71,8 +87,8 @@ class _HomePageState extends State<HomePage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(onPressed: decrement,
-            style: TextButton.styleFrom(backgroundColor: Colors.blue,
+            TextButton(onPressed: isEmpty ? null : decrement,
+            style: TextButton.styleFrom(backgroundColor: isEmpty ?  Colors.blue.withOpacity(0.2) : Colors.blue,
             fixedSize: const Size(100,100),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24),
@@ -89,9 +105,9 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox( width: 32,),
 
-            TextButton(onPressed: increment, 
+            TextButton(onPressed: isFull ? null : increment, 
             style: TextButton.styleFrom(
-              backgroundColor: Colors.blue,
+              backgroundColor: isFull ? Colors.blue.withOpacity(.2) : Colors.blue,
               fixedSize: const Size(100,100),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24)
